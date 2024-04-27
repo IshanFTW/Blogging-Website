@@ -31,10 +31,12 @@ userRouter.post('/signup', async (c) =>{
         data: {
           email: body.email,
           password: body.password,
+          name: body.name
         }
       })
       const jwt = await sign({id: user.id}, c.env.JWT_SECRET);
-      return c.json({ jwt });
+      const name = user.name
+      return c.json({ jwt, name });
     }catch(error){
       c.status(403);
       console.error('error in signup', error);
@@ -62,13 +64,14 @@ userRouter.post('/signup', async (c) =>{
           password: body.password
       }
     })
+      const name = user?.name;
   
     if(!user){
       c.status(403);
       return c.json({error: "user not found"})
     }
     const jwt = await sign({id: user.id}, c.env.JWT_SECRET);
-      return c.json({ jwt });
+      return c.json({ jwt, name });
     }
     catch(error){
       c.status(403);
@@ -77,3 +80,4 @@ userRouter.post('/signup', async (c) =>{
     }
     
   })
+
